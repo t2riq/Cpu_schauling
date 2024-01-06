@@ -1,0 +1,9 @@
+void fcfs(struct node *header)
+{	struct node * temp;
+	temp=header;
+	int copmlition_time=0,time_around=0,wating_time=0,avarage;
+	cout<<"Scheduling Method:  First Come First Served"<<endl;
+	cout<<"Process Waiting Times:"<<endl;
+	avarage=calwaiting_time(copmlition_time,time_around,wating_time);
+	cout<<"Average Waiting Time: "<<avarage<<" ms";
+}
