@@ -1,0 +1,109 @@
+#include <cstdlib>
+#include <iostream>
+using namespace std;
+struct node
+{
+    int burst_time;
+	int arrival_time;
+	int priority;
+    struct node *next;
+};
+struct node * createNode(int,int,int);
+void display(struct node *);
+struct node * insertBack(struct node *, int,int,int);
+void fcfs(struct node *);
+struct node *header=NULL;
+int calwaiting_time(int,int,int);
+int main()
+{
+	cout<<"enter by order 1_burst time ,2_arrival time,3_priority:"<<endl;
+	int burst_input,arrival_input,priority_input;
+   	cin>>burst_input>>arrival_input>>priority_input;
+   	header=createNode(burst_input,arrival_input,priority_input);
+   while(1){
+   cout<<"do you want to add more value for yes press 1 ,for no press 2 "<<endl;
+   	int op;
+   	cin>>op;
+   	if(op==1){
+        cout<<"enter by order 1_burst time ,2_arrival time,3_priority:"<<endl;
+	int input1,input2,input3;
+   	cin>>input1>>input2>>input3;
+   	header=insertBack(header,input1,input2,input3);
+   }
+   else if(op==2)
+   break;
+   else
+   cout<<"Error:please choose an option:"<<endl;
+}
+display(header);
+
+    fcfs(header);
+
+ return 0;
+}
+void display(struct node *header)
+{
+    if (header == NULL)
+        cout << "List is empty" << endl;
+    struct node *temp = header;
+    while (temp != NULL)
+    {
+        cout << temp->burst_time<<": "<<temp->arrival_time<<" :" <<temp->priority <<" --> ";
+        temp=temp->next;
+    }
+    cout << endl;
+}
+struct node * createNode(int data1, int data2, int data3)
+{
+     struct node * temp;
+     temp = (struct node *) malloc(sizeof(node));
+     temp->burst_time = data1;
+     temp->arrival_time= data2;
+     temp->priority=data3;
+     temp->next = NULL;
+     return temp;
+}
+struct node * insertBack(struct node *header, int data1,int data2,int data3)
+{
+       struct node * temp = createNode(data1,data2,data3);
+       struct node * headertemp;
+       if (header == NULL)
+       {
+          header = temp;
+          return header;
+       }
+       headertemp=header;
+       while(headertemp->next != NULL)
+            headertemp=headertemp->next;
+       headertemp->next = temp;
+       return header;
+}
+void fcfs(struct node *header)
+{	struct node * temp;
+	temp=header;
+	int copmlition_time=0,time_around=0,wating_time=0,avarage;
+	cout<<"Scheduling Method:  First Come First Served"<<endl;
+	cout<<"Process Waiting Times:"<<endl;
+	avarage=calwaiting_time(copmlition_time,time_around,wating_time);
+	cout<<"Average Waiting Time: "<<avarage<<" ms";
+}
+int calwaiting_time( int copmlition_time,int time_around,int wating_time){
+    struct node * temp;
+    temp=header;
+    int sum_avarage=0;
+    int avarage=0;
+    int count=0;
+    int process_numb=1;	
+	while(temp!=NULL){
+	copmlition_time=copmlition_time+(temp->burst_time);
+	time_around=copmlition_time-(temp->arrival_time);
+	wating_time=time_around-(temp->burst_time);
+	cout<<"P"<<process_numb<<": "<<wating_time<<" ms"<<endl;
+    sum_avarage=sum_avarage+wating_time;
+    count++;
+    process_numb++;
+	temp=temp->next;
+	}
+    avarage=sum_avarage/count;
+    return avarage;
+}
