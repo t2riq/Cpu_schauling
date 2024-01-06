@@ -1,0 +1,6 @@
+display(header);
+
+    fcfs(header);
+
+ return 0;
+}
