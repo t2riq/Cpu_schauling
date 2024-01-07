@@ -1,3 +1,6 @@
+void swapFCFS (struct node *, struct node *);
+struct node * sortFCFS(struct node *);
+
 void swapFCFS (struct node * temp1, struct node *temp2)
 {
 	int burst,arrival,priority;
