@@ -1,0 +1,300 @@
+#include <cstdlib>
+#include <iostream>
+using namespace std;
+struct node
+{
+    int burst_time;
+	int arrival_time;
+	int priority;
+    struct node *next;
+};
+struct node * createNode(int,int,int);
+void display(struct node *);
+struct node * insertFront(struct node *, int,int,int);
+struct node * insertBack(struct node *, int,int,int);
+void fcfs(struct node *);
+struct node *header=NULL;
+int calwaiting_time(struct node *,int,int,int);
+void deleteAfter(struct node *);
+struct node *deleteFront(struct node *);
+void swapFCFS (struct node *, struct node *);
+struct node * sortFCFS(struct node *);
+struct node * add_new_process(struct node *);
+void ShortestJobFirst_NP(struct node *);
+struct node * sortSJF(struct node *);
+void Show_Result(struct node *);
+int main(void)
+{
+	int choice;	
+while(true)
+{	
+		
+cout<<" \n                                CPU Scheduler Simulator                                \n";
+cout<<"\n 1) Scheduling Method";
+cout<<"\n 2) Preemptive Mode";
+cout<< "\n 3) Non-preemptive Mode";
+cout<< "\n 4) End Programe ";
+cout<< "\n select option > ";
+cin>>choice;		
+	switch(choice)
+	{
+	case 1:
+	{
+	int choice_method;
+	cout<<" \n 1-> First Come, First Served Scheduling";
+    cout<<"\n 2-> Shortest-Job-First Scheduling";
+	cout<<"\n 3-> Priority Scheduling";
+	cout<<"\n 4-> Round-Robin Scheduling ";
+	cout<<"\n please select you Scheduling Method : ";
+	cin>>choice_method;
+		switch(choice_method)
+		{
+		case 1:
+		{
+        header=add_new_process(header);
+        fcfs(header);
+        cout<<"ordered Processes\n";
+        display(header); 
+        cout<<"Scheduling Method: First Come First Served\n";   
+    	Show_Result(header);
+		}
+		break;
+		case 2:
+		{						
+		cout<<"\n 1-> Non Preemtive Method";
+		cout<<"\n 2-> preemtive method";
+		int a;
+		cout<<"\n please select a method : ";
+		cin>>a;							
+			switch(a)
+			{
+			case 1:
+	        {
+            header=add_new_process(header);
+            ShortestJobFirst_NP(header);
+            cout<<"ordered Processes\n";
+            display(header);   
+            cout<<"Scheduling Method: Shortest Job First – Non-Preemptive\n"; 
+	        Show_Result(header);
+			}
+	        break;
+			case 2:
+            {
+			cout<<"not yet";							
+			}
+			break;
+			default:
+			{
+		    cout<<" it can either be 1 or 2 only";
+			}
+			break;
+    		}
+		}
+		break;
+	    case 3:
+		{	
+		cout<<"not yet";
+    	}
+        break;
+		case 4:
+		{
+		cout<<"not yet";
+		}	
+		break;
+	    default:
+		{
+		cout<<" you made a wrong choice Please choose from: 1-4";
+		}
+		break;
+		}
+	}
+	break;
+	case 2:
+	{
+    cout<<"not yet";
+	}
+	break;
+	case 3:
+	{
+	header=add_new_process(header);
+    ShortestJobFirst_NP(header);
+	}
+	break;
+	case 4:
+	{
+	return 0;
+	}
+    break;  
+    default:
+	break;		
+	}
+}
+}
+struct node * add_new_process(struct node *header)
+{
+		cout<<"enter by order 1_burst time ,2_arrival time,3_priority:"<<endl;
+	    int burst_input,arrival_input,priority_input;
+   	    cin>>burst_input>>arrival_input>>priority_input;
+   	    header=createNode(burst_input,arrival_input,priority_input);
+        while(true){
+        cout<<"do you want to add more value for yes press 1 ,for no press 2 "<<endl;
+   	    int op;
+   	    cin>>op;
+   	    if(op==1){
+        cout<<"enter by order 1_burst time ,2_arrival time,3_priority:"<<endl;
+	    int input1,input2,input3;
+   	    cin>>input1>>input2>>input3;
+   	    header=insertBack(header,input1,input2,input3);
+        }
+        else if(op==2)
+        break;
+        else
+        cout<<"Error:please choose an option:"<<endl;
+        }
+        return (header);
+}
+
+void display(struct node *header)
+{
+    if (header == NULL)
+        cout << "List is empty" << endl;
+    struct node *temp = header;
+    while (temp != NULL)
+    {
+        cout << temp->burst_time<<": "<<temp->arrival_time<<" :" <<temp->priority <<" --> ";
+        temp=temp->next;
+    }
+    cout << endl;
+}
+struct node * createNode(int data1, int data2, int data3)
+{
+     struct node * temp;
+     temp = (struct node *) malloc(sizeof(node));
+     temp->burst_time = data1;
+     temp->arrival_time= data2;
+     temp->priority=data3;
+     temp->next = NULL;
+     return temp;
+}
+struct node * insertFront(struct node *header,  int data1,int data2,int data3)
+{
+     struct node * temp = createNode(data1,data2,data3);
+     temp->next = header;
+     header=temp;
+     return header;
+}
+struct node * insertBack(struct node *header, int data1,int data2,int data3)
+{
+       struct node * temp = createNode(data1,data2,data3);
+       struct node * headertemp;
+       if (header == NULL)
+       {
+          header = temp;
+          return header;
+       }
+       headertemp=header;
+       while(headertemp->next != NULL)
+            headertemp=headertemp->next;
+       headertemp->next = temp;
+       return header;
+}
+
+void fcfs(struct node *header)
+{	
+	header=sortFCFS(header);
+}
+void Show_Result(struct node *header)
+{	
+	int copmlition_time=0,time_around=0,wating_time=0,avarage;
+	cout<<"Process Waiting Times:"<<endl;
+	avarage=calwaiting_time(header,copmlition_time,time_around,wating_time);
+	cout<<"Average Waiting Time: "<<avarage<<" ms";
+}
+void ShortestJobFirst_NP(struct node *header)
+{	
+	struct node * temp;
+    temp=header;
+    header= sortFCFS(header);
+    header=sortSJF(header->next);
+    header=insertFront(header,temp->burst_time,temp->arrival_time,temp->priority);
+}
+int calwaiting_time( struct node *header,int copmlition_time,int time_around,int wating_time){
+    struct node * temp;
+    temp=header;
+    int sum_avarage=0;
+    int avarage=0;
+    int count=0;
+    int process_numb=1;	
+	while(temp!=NULL){
+	copmlition_time=copmlition_time+(temp->burst_time);
+	time_around=copmlition_time-(temp->arrival_time);
+	wating_time=time_around-(temp->burst_time);
+	cout<<"P"<<process_numb<<": "<<wating_time<<" ms"<<endl;
+    sum_avarage=sum_avarage+wating_time;
+    count++;
+    process_numb++;
+	temp=temp->next;
+	}
+    avarage=sum_avarage/count;
+    return avarage;
+}
+void swapFCFS (struct node * temp1, struct node *temp2)
+{
+	int burst,arrival,priority;
+	burst= temp1->burst_time;
+	arrival=temp1->arrival_time;
+	priority=temp1->priority;
+	temp1->burst_time= temp2 -> burst_time;
+	temp1->arrival_time= temp2-> arrival_time;
+	temp1->priority=temp2 -> priority;
+	temp2-> burst_time= burst;
+	temp2 -> arrival_time= arrival;
+	temp2 -> priority= priority;
+}
+struct node * sortFCFS(struct node *header)
+{
+	int swaping;
+	struct node *lft;  
+	struct node *right = NULL; 
+	do
+	{	
+		swaping = 0;
+		lft = header;
+		while(lft->next != right)
+		{
+			if (lft->arrival_time> lft->next->arrival_time) 
+			{
+				swapFCFS(lft, lft->next); 
+                swaping = 1; 
+			}
+			lft= lft->next;
+		}
+		lft= lft;
+	}while(swaping);
+    return(header);
+}
+struct node * sortSJF(struct node *header)
+{
+	int swaping;
+	struct node *lft;  
+	struct node *right = NULL;
+	do
+	{	
+		swaping = 0;
+		lft = header;
+		while(lft->next != right)
+		{
+			if (lft->burst_time> lft->next->burst_time) 
+			{
+				swapFCFS(lft, lft->next); 
+                swaping = 1;
+			}
+			lft= lft->next;
+		}
+       
+		right= lft;
+	}while(swaping);
+    return(header);
+}
+
+
