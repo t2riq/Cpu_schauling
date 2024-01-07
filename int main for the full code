@@ -1,0 +1,107 @@
+int main(void)
+{
+	int choice;	
+while(true)
+{	
+		
+cout<<" \n                                CPU Scheduler Simulator                                \n";
+cout<<"\n 1) Scheduling Method";
+cout<<"\n 2) Preemptive Mode";
+cout<< "\n 3) Non-preemptive Mode";
+cout<< "\n 4) End Programe ";
+cout<< "\n select option > ";
+cin>>choice;		
+	switch(choice)
+	{
+	case 1:
+	{
+	int choice_method;
+	cout<<" \n 1-> First Come, First Served Scheduling";
+    cout<<"\n 2-> Shortest-Job-First Scheduling";
+	cout<<"\n 3-> Priority Scheduling";
+	cout<<"\n 4-> Round-Robin Scheduling ";
+	cout<<"\n please select you Scheduling Method : ";
+	cin>>choice_method;
+		switch(choice_method)
+		{
+		case 1:
+		{
+        header=add_new_process(header);
+        fcfs(header);
+        cout<<"ordered Processes\n";
+        display(header); 
+        cout<<"Scheduling Method: First Come First Served\n";   
+    	Show_Result(header);
+		}
+		break;
+		case 2:
+		{						
+		cout<<"\n 1-> Non Preemtive Method";
+		cout<<"\n 2-> preemtive method";
+		int a;
+		cout<<"\n please select a method : ";
+		cin>>a;							
+			switch(a)
+			{
+			case 1:
+	        {
+            header=add_new_process(header);
+            ShortestJobFirst_NP(header);
+            cout<<"ordered Processes\n";
+            display(header);   
+            cout<<"Scheduling Method: Shortest Job First – Non-Preemptive\n"; 
+	        Show_Result(header);
+			}
+	        break;
+			case 2:
+            {
+			cout<<"not yet";							
+			}
+			break;
+			default:
+			{
+		    cout<<" it can either be 1 or 2 only";
+			}
+			break;
+    		}
+		}
+		break;
+	    case 3:
+		{	
+		cout<<"not yet";
+    	}
+        break;
+		case 4:
+		{
+		cout<<"not yet";
+		}	
+		break;
+	    default:
+		{
+		cout<<" you made a wrong choice Please choose from: 1-4";
+		}
+		break;
+		}
+	}
+	break;
+	case 2:
+	{
+    cout<<"not yet";
+	}
+	break;
+	case 3:
+	{
+	header=add_new_process(header);
+    ShortestJobFirst_NP(header);
+	}
+	break;
+	case 4:
+	{
+	return 0;
+	}
+    break;  
+    default:
+	break;		
+	}
+}
+}
