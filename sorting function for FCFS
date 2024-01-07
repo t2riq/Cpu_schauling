@@ -1,0 +1,35 @@
+void swapFCFS (struct node * temp1, struct node *temp2)
+{
+	int burst,arrival,priority;
+	burst= temp1->burst_time;
+	arrival=temp1->arrival_time;
+	priority=temp1->priority;
+	temp1->burst_time= temp2 -> burst_time;
+	temp1->arrival_time= temp2-> arrival_time;
+	temp1->priority=temp2 -> priority;
+	temp2-> burst_time= burst;
+	temp2 -> arrival_time= arrival;
+	temp2 -> priority= priority;
+}
+struct node * sortFCFS(struct node *header)
+{
+	int swaping;
+	struct node *lft;  
+	struct node *right = NULL; 
+	do
+	{	
+		swaping = 0;
+		lft = header;
+		while(lft->next != right)
+		{
+			if (lft->arrival_time> lft->next->arrival_time) 
+			{
+				swapFCFS(lft, lft->next); 
+                swaping = 1; 
+			}
+			lft= lft->next;
+		}
+		lft= lft;
+	}while(swaping);
+    return(header);
+}
