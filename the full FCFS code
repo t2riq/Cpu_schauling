@@ -13,7 +13,7 @@ void display(struct node *);
 struct node * insertBack(struct node *, int,int,int);
 void fcfs(struct node *);
 struct node *header=NULL;
-int calwaiting_time(int,int,int);
+int calwaiting_time(struct node *,int,int,int);
 int main()
 {
 	cout<<"enter by order 1_burst time ,2_arrival time,3_priority:"<<endl;
