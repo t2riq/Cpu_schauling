@@ -96,7 +96,12 @@ cin>>choice;
 		break;
 	    case 3:
 		{	
-		cout<<"not yet";
+			header=add_new_process(header);
+            proirity(header);
+            cout<<"ordered Processes\n";
+            display(header);   
+            cout<<"Scheduling Method: Priority Scheduling – Non-Preemptive\n"; 
+	        Show_Result(header);
     	}
         break;
 		case 4:
@@ -303,3 +308,34 @@ struct node * sortSJF(struct node *header)
 	}while(swaping);
     return(header);
 }
+struct node * sortproirty(struct node *header)
+{
+	int swaping;
+	struct node *lft;  
+	struct node *right = NULL;
+	do
+	{	
+		swaping = 0;
+		lft = header;
+		while(lft->next != right)
+		{
+			if (lft->priority> lft->next->priority) 
+			{
+				swapFCFS(lft, lft->next); 
+                swaping = 1;
+			}
+			lft= lft->next;
+		} 
+		right= lft;
+	}while(swaping);
+    return(header);
+}
+void proirity(struct node *header)
+{	
+	struct node * temp;
+    temp=header;
+    header= sortFCFS(header);
+    header=sortproirty(header->next);
+    header=insertFront(header,temp->burst_time,temp->arrival_time,temp->priority,temp->i);
+}
+
