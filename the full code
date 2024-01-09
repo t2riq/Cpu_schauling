@@ -229,7 +229,7 @@ int calwaiting_time( struct node *header,int copmlition_time,int time_around,int
 	copmlition_time=copmlition_time+(temp->burst_time);
 	time_around=copmlition_time-(temp->arrival_time);
 	wating_time=time_around-(temp->burst_time);
-	cout<<"P"<<process_numb<<": "<<wating_time<<" ms"<<endl;
+	cout<<"P"<<process_numb<<"["<<""<<temp->burst_time<<":"<<temp->arrival_time<<":"<<temp->priority<<"]"<<": "<<wating_time<<" ms"<<endl;
     sum_avarage=sum_avarage+wating_time;
     count++;
     process_numb++;
