@@ -6,12 +6,13 @@ struct node
     int burst_time;
 	int arrival_time;
 	int priority;
+	int i;
     struct node *next;
 };
-struct node * createNode(int,int,int);
+struct node * createNode(int,int,int,int);
 void display(struct node *);
-struct node * insertFront(struct node *, int,int,int);
-struct node * insertBack(struct node *, int,int,int);
+struct node * insertFront(struct node *, int,int,int,int);
+struct node * insertBack(struct node *, int,int,int,int);
 void fcfs(struct node *);
 struct node *header=NULL;
 int calwaiting_time(struct node *,int,int,int);
@@ -23,6 +24,8 @@ struct node * add_new_process(struct node *);
 void ShortestJobFirst_NP(struct node *);
 struct node * sortSJF(struct node *);
 void Show_Result(struct node *);
+struct node * sortproirty(struct node *);
+void proirity(struct node *);
 int main(void)
 {
 	int choice;	
@@ -133,9 +136,10 @@ cin>>choice;
 struct node * add_new_process(struct node *header)
 {
 		cout<<"enter by order 1_burst time ,2_arrival time,3_priority:"<<endl;
-	    int burst_input,arrival_input,priority_input;
+	    int burst_input,arrival_input,priority_input,index_input=1;
    	    cin>>burst_input>>arrival_input>>priority_input;
-   	    header=createNode(burst_input,arrival_input,priority_input);
+   	    header=createNode(burst_input,arrival_input,priority_input,index_input);
+		index_input++;
         while(true){
         cout<<"do you want to add more value for yes press 1 ,for no press 2 "<<endl;
    	    int op;
@@ -144,7 +148,9 @@ struct node * add_new_process(struct node *header)
         cout<<"enter by order 1_burst time ,2_arrival time,3_priority:"<<endl;
 	    int input1,input2,input3;
    	    cin>>input1>>input2>>input3;
-   	    header=insertBack(header,input1,input2,input3);
+		
+   	    header=insertBack(header,input1,input2,input3,index_input);
+		index_input++;
         }
         else if(op==2)
         break;
@@ -166,26 +172,27 @@ void display(struct node *header)
     }
     cout << endl;
 }
-struct node * createNode(int data1, int data2, int data3)
+struct node * createNode(int data1, int data2, int data3,int index)
 {
      struct node * temp;
      temp = (struct node *) malloc(sizeof(node));
      temp->burst_time = data1;
      temp->arrival_time= data2;
      temp->priority=data3;
+	 temp->i=index;
      temp->next = NULL;
      return temp;
 }
-struct node * insertFront(struct node *header,  int data1,int data2,int data3)
+struct node * insertFront(struct node *header,  int data1,int data2,int data3,int index)
 {
-     struct node * temp = createNode(data1,data2,data3);
+     struct node * temp = createNode(data1,data2,data3,index);
      temp->next = header;
      header=temp;
      return header;
 }
-struct node * insertBack(struct node *header, int data1,int data2,int data3)
+struct node * insertBack(struct node *header, int data1,int data2,int data3,int index)
 {
-       struct node * temp = createNode(data1,data2,data3);
+       struct node * temp = createNode(data1,data2,data3,index);
        struct node * headertemp;
        if (header == NULL)
        {
@@ -216,23 +223,21 @@ void ShortestJobFirst_NP(struct node *header)
     temp=header;
     header= sortFCFS(header);
     header=sortSJF(header->next);
-    header=insertFront(header,temp->burst_time,temp->arrival_time,temp->priority);
+    header=insertFront(header,temp->burst_time,temp->arrival_time,temp->priority,temp->i);
 }
 int calwaiting_time( struct node *header,int copmlition_time,int time_around,int wating_time){
     struct node * temp;
     temp=header;
     int sum_avarage=0;
     int avarage=0;
-    int count=0;
-    int process_numb=1;	
+    int count=0;	
 	while(temp!=NULL){
 	copmlition_time=copmlition_time+(temp->burst_time);
 	time_around=copmlition_time-(temp->arrival_time);
 	wating_time=time_around-(temp->burst_time);
-	cout<<"P"<<process_numb<<"["<<""<<temp->burst_time<<":"<<temp->arrival_time<<":"<<temp->priority<<"]"<<": "<<wating_time<<" ms"<<endl;
+	cout<<"P"<<temp->i<<": "<<wating_time<<" ms"<<endl;
     sum_avarage=sum_avarage+wating_time;
     count++;
-    process_numb++;
 	temp=temp->next;
 	}
     avarage=sum_avarage/count;
@@ -240,16 +245,19 @@ int calwaiting_time( struct node *header,int copmlition_time,int time_around,int
 }
 void swapFCFS (struct node * temp1, struct node *temp2)
 {
-	int burst,arrival,priority;
+	int burst,arrival,priority,i;
 	burst= temp1->burst_time;
 	arrival=temp1->arrival_time;
 	priority=temp1->priority;
+	i=temp1->i;
 	temp1->burst_time= temp2 -> burst_time;
 	temp1->arrival_time= temp2-> arrival_time;
 	temp1->priority=temp2 -> priority;
+	temp1->i=temp2->i;
 	temp2-> burst_time= burst;
 	temp2 -> arrival_time= arrival;
 	temp2 -> priority= priority;
+	temp2->i=i;
 }
 struct node * sortFCFS(struct node *header)
 {
@@ -290,11 +298,8 @@ struct node * sortSJF(struct node *header)
                 swaping = 1;
 			}
 			lft= lft->next;
-		}
-       
+		} 
 		right= lft;
 	}while(swaping);
     return(header);
 }
-
-
