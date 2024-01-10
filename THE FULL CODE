@@ -32,6 +32,13 @@ void Show_Result(struct node *);
 struct node * sortproirty(struct node *);
 void proirity(struct node *);
 struct node * read_from_File(struct node *);
+int list_size(struct node *);
+
+string toString(double x) {
+   stringstream str;
+   str << x;
+   return str.str();
+}
 int main(void)
 {
 	int choice;
@@ -363,4 +370,14 @@ struct node * read_from_File(struct node *header)
 	}
 	fclose(file);
 	return header;
+}
+int list_size(struct node *header)
+{
+	int x=0;
+	while(header!=NULL)
+	{
+		x++;
+		header=header->next;
+	}
+	return x;	
 }
