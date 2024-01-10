@@ -150,11 +150,7 @@ cin>>choice;
 }
 struct node * add_new_process(struct node *header)
 {
-		//cout<<"enter by order 1_burst time ,2_arrival time,3_priority:"<<endl;
-	   int index_input=1;//,burst_input,arrival_input,priority_input;
-   	    //cin>>burst_input>>arrival_input>>priority_input;
-   	    //header=createNode(burst_input,arrival_input,priority_input,index_input);
-		//index_input++;
+int index_input=1;
         while(true){
         cout<<"do you want to add process for Yes press (1) ,for No press (2) "<<endl;
    	    int op;
