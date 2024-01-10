@@ -1,5 +1,10 @@
 #include <cstdlib>
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <string.h>
+#include <sstream> 
+#define MAXIMUM_LINE 1024
 using namespace std;
 struct node
 {
@@ -26,12 +31,14 @@ struct node * sortSJF(struct node *);
 void Show_Result(struct node *);
 struct node * sortproirty(struct node *);
 void proirity(struct node *);
+struct node * read_from_File(struct node *);
 int main(void)
 {
-	int choice;	
+	int choice;
+
 while(true)
 {	
-		
+header=NULL;	
 cout<<" \n                                CPU Scheduler Simulator                                \n";
 cout<<"\n 1) Scheduling Method";
 cout<<"\n 2) Preemptive Mode";
@@ -54,6 +61,7 @@ cin>>choice;
 		{
 		case 1:
 		{
+		header=read_from_File(header);
         header=add_new_process(header);
         fcfs(header);
         cout<<"ordered Processes\n";
@@ -73,6 +81,7 @@ cin>>choice;
 			{
 			case 1:
 	        {
+			header=read_from_File(header);
             header=add_new_process(header);
             ShortestJobFirst_NP(header);
             cout<<"ordered Processes\n";
@@ -95,7 +104,7 @@ cin>>choice;
 		}
 		break;
 	    case 3:
-		{	
+		{	header=read_from_File(header);
 			header=add_new_process(header);
             proirity(header);
             cout<<"ordered Processes\n";
@@ -124,6 +133,7 @@ cin>>choice;
 	break;
 	case 3:
 	{
+	header=read_from_File(header);
 	header=add_new_process(header);
     ShortestJobFirst_NP(header);
 	}
@@ -140,13 +150,13 @@ cin>>choice;
 }
 struct node * add_new_process(struct node *header)
 {
-		cout<<"enter by order 1_burst time ,2_arrival time,3_priority:"<<endl;
-	    int burst_input,arrival_input,priority_input,index_input=1;
-   	    cin>>burst_input>>arrival_input>>priority_input;
-   	    header=createNode(burst_input,arrival_input,priority_input,index_input);
-		index_input++;
+		//cout<<"enter by order 1_burst time ,2_arrival time,3_priority:"<<endl;
+	   int index_input=1;//,burst_input,arrival_input,priority_input;
+   	    //cin>>burst_input>>arrival_input>>priority_input;
+   	    //header=createNode(burst_input,arrival_input,priority_input,index_input);
+		//index_input++;
         while(true){
-        cout<<"do you want to add more value for yes press 1 ,for no press 2 "<<endl;
+        cout<<"do you want to add process for Yes press (1) ,for No press (2) "<<endl;
    	    int op;
    	    cin>>op;
    	    if(op==1){
@@ -215,6 +225,7 @@ void fcfs(struct node *header)
 {	
 	header=sortFCFS(header);
 }
+
 void Show_Result(struct node *header)
 {	
 	int copmlition_time=0,time_around=0,wating_time=0,avarage;
@@ -338,4 +349,22 @@ void proirity(struct node *header)
     header=sortproirty(header->next);
     header=insertFront(header,temp->burst_time,temp->arrival_time,temp->priority,temp->i);
 }
-
+struct node * read_from_File(struct node *header)
+{
+	FILE *file;
+	char line[MAXIMUM_LINE];
+	if ((file = fopen("input.txt", "r")) == NULL)
+	        {
+	        	cout<<" could not read file !"<<endl;
+	        	return 0;
+			}
+	int x=1;        
+	while (fgets(line,MAXIMUM_LINE, file) != NULL) {
+		 int num[3];
+	        sscanf(line,"%d:%d:%d\n",&num[0],&num[1],&num[2]);
+	    	header=insertBack(header,num[0],num[1],num[2],x);
+	    	x++;	
+	}
+	fclose(file);
+	return header;
+}
