@@ -32,6 +32,8 @@ void Show_Result(struct node *);
 struct node * sortproirty(struct node *);
 void proirity(struct node *);
 struct node * read_from_File(struct node *);
+void round_Robin(struct node *);
+void calwaiting_time_rRobin(struct node *);
 int list_size(struct node *);
 
 string toString(double x) {
@@ -104,7 +106,7 @@ cin>>choice;
 			break;
 			default:
 			{
-		    cout<<" it can either be 1 or 2 only";
+		    cout<<"Wrong choice :)";
 			}
 			break;
     		}
@@ -122,7 +124,11 @@ cin>>choice;
         break;
 		case 4:
 		{
-		cout<<"not yet";
+		header=read_from_File(header);
+		header=add_new_process(header);
+		round_Robin(header);
+		cout<<" Ordered Processes :\n";
+		display(header);
 		}	
 		break;
 	    default:
@@ -157,7 +163,7 @@ cin>>choice;
 }
 struct node * add_new_process(struct node *header)
 {
-int index_input=1;
+	   int index_input=1;
         while(true){
         cout<<"do you want to add process for Yes press (1) ,for No press (2) "<<endl;
    	    int op;
@@ -370,6 +376,62 @@ struct node * read_from_File(struct node *header)
 	}
 	fclose(file);
 	return header;
+}
+
+void round_Robin(struct node *header)
+{
+	calwaiting_time_rRobin(header);
+}
+void calwaiting_time_rRobin( struct node *header){
+	int size=list_size(header);
+	int time_quantum =2;
+	header=sortFCFS(header);
+	double sum=0;
+	double tsum=0;
+	double avg;
+	string waiting_time="  \n Scheduling Method: Round Robin Scheduling – time quantum=2 \n Process Waiting Times: \n";
+	int x;
+	int y;
+	int i=0;
+while(header!=NULL)
+{
+	if(header->i==y)
+	{
+	break;
+	}
+	y=header->i;
+	if(header->burst_time !=0)
+	{	
+	x=header->burst_time;
+	if(x > time_quantum)
+	{
+	x=x-2;
+	insertBack(header,x,header->arrival_time,header->priority,header->i);
+	tsum+=2;
+	}
+	else if(x==time_quantum)
+	{
+	x=x-2;
+	sum+=tsum-header->arrival_time-(2*i);
+	waiting_time=waiting_time+"P" +toString(header->i) +": " + toString(tsum-header->arrival_time-(2*i)) + " ms \n";
+	tsum+=2;
+	}
+	else if(x==1)
+	{
+	x=x-1;
+	sum+=tsum-header->arrival_time-(2*i);
+	waiting_time=waiting_time+"P" +toString(header->i) +": " + toString(tsum-header->arrival_time-(2*i)) + " ms \n";
+	tsum+=1;
+	}
+	if(header->i==5)
+	i++;	
+	}
+	header=header->next;
+
+}
+	avg=sum/size;
+	waiting_time=waiting_time+ "Average Waiting Time:  "+ toString(avg)+" ms \n";
+	cout<<waiting_time;
 }
 int list_size(struct node *header)
 {
